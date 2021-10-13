@@ -6,7 +6,7 @@
   >
     <md-app-toolbar class="md-primary md-dense">
       <div class="md-toolbar-section-start">
-        <router-link to="/" class="md-title">{{ $t('title') }}</router-link>
+        <router-link to="/" class="md-title">YouSong</router-link>
       </div>
 
       <div class="md-subheading md-toolbar-section-end">
@@ -15,16 +15,19 @@
     </md-app-toolbar>
 
     <md-app-content>
-      <router-view />
+      <song-view />
     </md-app-content>
   </md-app>
 </template>
 
 <script>
+import SongView from '@/components/SongView'
+
 export default {
     name: 'App',
 
     components: {
+        SongView,
     },
 
     methods: {
