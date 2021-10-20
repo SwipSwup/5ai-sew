@@ -1,7 +1,11 @@
 <template>
   <div>
+    <div>
+        <page-nav :page="page"/>
+    </div>
+
     <song
-        v-for="s in songs"
+        v-for="s in page.entities"
         :key="s._links.self.href"
         :song="s"
     />
@@ -9,6 +13,7 @@
 </template>
 
 <script>
+import PageNav from '@/components/PageNav'
 import Song from '@/components/Song'
 import SongEntity from '@/models/Song'
 import { loadPage } from '@/services/rest'
@@ -17,12 +22,13 @@ export default {
     name: 'SongView',
 
     components: {
+        PageNav,
         Song,
     },
 
     data() {
         return {
-            songs: [],
+            page: {},
         }
     },
 
@@ -33,8 +39,8 @@ export default {
     methods: {
         load() {
             loadPage(SongEntity)
-                .then(entities => {
-                    this.songs = entities
+                .then(page => {
+                    this.page = page
                 })
         }
     },
