@@ -12,7 +12,7 @@ export function loadPage(Entity, page = 0) {
             { params: { page } }
         )
         .then(response => {
-            const page = new Page(response, Entity)
+            const page = new Page(Entity, response)
             console.log('rest.load() OK', page)
             return page
         })

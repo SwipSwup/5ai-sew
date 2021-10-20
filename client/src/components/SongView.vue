@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import Page from '@/models/Page'
 import PageNav from '@/components/PageNav'
 import Song from '@/components/Song'
 import SongEntity from '@/models/Song'
@@ -28,7 +29,7 @@ export default {
 
     data() {
         return {
-            page: {},
+            page: new Page(),
         }
     },
 
