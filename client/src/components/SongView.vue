@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-        <page-nav :page="page"/>
+        <page-nav :page="page" @navigated="load"/>
     </div>
 
     <song
@@ -38,8 +38,8 @@ export default {
     },
 
     methods: {
-        load() {
-            loadPage(SongEntity)
+        load(pageNum = 0) {
+            loadPage(SongEntity, pageNum, { size: 6 })
                 .then(page => {
                     this.page = page
                 })
