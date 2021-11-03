@@ -8,6 +8,7 @@
         v-for="s in page.entities"
         :key="s._links.self.href"
         :song="s"
+        @onDelete="load(page.number)"
     />
   </div>
 </template>

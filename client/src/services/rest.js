@@ -9,14 +9,29 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
     return axios
         .get(
             `${API_BASE}/${Entity.path}`,
-            { params: { page: pageNum, ...params } }
+            {params: {page: pageNum, ...params}}
         )
         .then(response => {
             const page = new Page(Entity, response)
-            console.log('rest.load() OK', page)
-            return page
+            if(page.entities.length || (pageNum === 0)) {
+                console.log('rest.load() OK', page)
+                return page
+            } else {
+                return loadPage(Entity, pageNum - 1, params)
+            }
         })
         .catch(response => {
             console.error('rest.load() error', response)
+        })
+}
+
+export function deletEntry(Song) {
+    return axios
+        .delete(
+            `${Song._links.self.href}`,
+            {}
+        )
+        .then(response => {
+            console.log(response);
         })
 }
