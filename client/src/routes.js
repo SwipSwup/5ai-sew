@@ -3,7 +3,6 @@ import EditSong from "@/components/EditSong";
 
 export default [
     // Insert additional routes here
-    // { name: 'editSong', path: '/editSong/:title:artist:genre', component: EditSong, props: true },
     { name: 'editSong', path: '/editSong/:song', component: EditSong, props: true },
     { name: 'info', path: '/info', component: { name: 'InfoView', render: h => h('div', 'Info view') }, props: true },
     { name: 'default', path: '*', component: SongView, props: true }

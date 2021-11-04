@@ -4,7 +4,6 @@ export default class Song {
         Object.assign(this, obj)
         this.genre = this.genre.split('|')
     }
-
 }
 
 // Pfad dieser Entities im REST-API des Servers

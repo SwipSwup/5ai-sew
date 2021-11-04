@@ -11,7 +11,6 @@
             <label for="title">Title</label>
             <md-input name="title" id="title" autocomplete="song-title" v-model="song.title" :disabled="sending"/>
             <span class="md-error" v-if="!$v.song.title.required">The title is required</span>
-            <!--            <span class="md-error" v-else-if="!$v.form.title.minlength">The title has to be at least 3 </span>-->
           </md-field>
 
           <div class="md-layout md-gutter">
@@ -32,7 +31,6 @@
               </md-chips>
             </div>
           </div>
-
 
         </md-card-content>
 
@@ -61,11 +59,6 @@ export default {
   mixins: [validationMixin],
   data: () => ({
     song: null,
-    form: {
-      title: null,
-      artist: null,
-      genre: null,
-    },
     songSaved: false,
     sending: false,
     lastUser: null
@@ -100,20 +93,21 @@ export default {
     saveSong() {
       this.sending = true
 
-      editEntry(this.song, {title: this.song.title, artist: this.song.artist, genre: this.song.genre.join('|')})
-          .then(() => {
-            this.songSaved = true
-            this.sending = false
-            this.clearForm()
-          })
+      editEntry(this.song, {
+        title: this.song.title,
+        artist: this.song.artist,
+        genre: this.song.genre.join('|')
+      }).then(() => {
+        this.songSaved = true
+        this.sending = false
+        this.clearForm()
+      })
     },
     validateUser() {
       this.$v.$touch()
 
-      console.log(this.song)
-      if (!this.$v.$invalid) {
+      if (!this.$v.$invalid)
         this.saveSong()
-      }
     }
   }
 }

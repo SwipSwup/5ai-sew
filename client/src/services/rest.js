@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Page from '@/models/Page'
-import SongModel from '@/models/Song'
 
 // Basis-URL aller REST-API-Endpunkte
 const API_BASE = 'http://localhost:8080/api'
@@ -13,7 +12,6 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
         )
         .then(response => {
             const page = new Page(Entity, response)
-            // const entities = response.data._embedded[Entity.path].map(obj => new Entity(obj))
             if (page.entities.length || (pageNum === 0)) {
                 console.log('rest.load() OK', page)
                 return page
@@ -56,9 +54,6 @@ export function editEntry(entry, data) {
             data,
             {}
         )
-        .then(() => {
-
-        })
         .catch(response => {
             console.error('rest.patch() error', response)
         })

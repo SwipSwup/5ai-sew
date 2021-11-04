@@ -1,5 +1,4 @@
 export default class Page {
-
     constructor(Entity, response) {
         if (response) {
             this.entities = response.data._embedded[Entity.path].map(obj => new Entity(obj))

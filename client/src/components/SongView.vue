@@ -17,13 +17,13 @@
           </md-button>
         </div>
       </md-table-toolbar>
+
       <md-table-row slot="md-table-row" slot-scope="{ item }"
                     md-selectable="multiple">
         <md-table-cell md-label="Title" md-sort-by="title">{{ item.title }}</md-table-cell>
         <md-table-cell md-label="Artist" md-sort-by="artist">{{ item.artist }}</md-table-cell>
         <md-table-cell md-label="Genre" md-sort-by="genre">{{ item.genre.toString() }}</md-table-cell>
         <md-table-cell md-label="">
-<!--          <router-link :to="{ name: 'editSong', params: {  title: item.title, artist: item.artist, genre: item.genre }}">-->
           <router-link :to="{ name: 'editSong', params: {  song: item }}">
             <md-button class="md-icon-button" @click="">
               <md-icon>edit</md-icon>
@@ -31,14 +31,8 @@
           </router-link>
         </md-table-cell>
       </md-table-row>
-    </md-table>
 
-    <!--        <song-->
-    <!--            v-for="s in page.entities"-->
-    <!--            :key="s._links.self.href"-->
-    <!--            :song="s"-->
-    <!--            @onDelete="load(page.number)"-->
-    <!--        />-->
+    </md-table>
   </div>
 </template>
 
