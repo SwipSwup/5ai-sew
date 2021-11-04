@@ -13,7 +13,8 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
         )
         .then(response => {
             const page = new Page(Entity, response)
-            if(page.entities.length || (pageNum === 0)) {
+            // const entities = response.data._embedded[Entity.path].map(obj => new Entity(obj))
+            if (page.entities.length || (pageNum === 0)) {
                 console.log('rest.load() OK', page)
                 return page
             } else {
@@ -25,13 +26,24 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
         })
 }
 
-export function deletEntry(Song) {
-    return axios
-        .delete(
-            `${Song._links.self.href}`,
-            {}
-        )
-        .then(response => {
-            console.log(response);
-        })
+export function deletEntry(item) {
+    console.log(item)
+    if (Array.isArray(item)) {
+        return axios
+            .delete(
+                `${item.pop()._links.self.href}`,
+                {}
+            )
+            .then(() => {
+                if (item.length >= 1) {
+                    return deletEntry(item)
+                }
+            })
+    } else {
+        return axios
+            .delete(
+                `${item.pop()._links.self.href}`,
+                {}
+            )
+    }
 }

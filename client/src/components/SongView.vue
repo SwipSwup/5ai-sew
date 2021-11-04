@@ -1,47 +1,43 @@
 <template>
   <div>
+    <div>
+      <page-nav :page="page" @navigated="load"/>
+    </div>
     <md-table v-model="page.entities" md-card @md-selected="onSelect">
+
       <md-table-toolbar>
         <h1 class="md-title">Songs</h1>
       </md-table-toolbar>
-
       <md-table-toolbar slot="md-table-alternate-header" slot-scope="{ count }">
         <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
 
         <div class="md-toolbar-section-end">
-          <md-button class="md-icon-button">
+          <md-button class="md-icon-button" @click="del">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
       </md-table-toolbar>
-
       <md-table-row slot="md-table-row" slot-scope="{ item }"
-                    md-selectable="multiple" md-auto-select>
+                    md-selectable="multiple">
         <md-table-cell md-label="Title" md-sort-by="name">{{ item.title }}</md-table-cell>
         <md-table-cell md-label="Artist" md-sort-by="email">{{ item.artist }}</md-table-cell>
         <md-table-cell md-label="Genre" md-sort-by="gender">{{ item.genre }}</md-table-cell>
+        <md-table-cell md-label="">
+          <router-link to="/editSong">
+            <md-button class="md-icon-button" @click="">
+              <md-icon>edit</md-icon>
+            </md-button>
+          </router-link>
+        </md-table-cell>
       </md-table-row>
-      <md-table-pagination
-          :md-page-size="rowsPerPage"
-          :md-page-options="[3, 5, 10, 15]"
-          :md-update="updatePagination"
-          :md-data.sync="users" />
     </md-table>
 
-    <p>Selected:</p>
-    {{ selected }}
-
-
-    <!--    <div>-->
-    <!--        <page-nav :page="page" @navigated="load"/>-->
-    <!--    </div>-->
-
-    <!--    <song-->
-    <!--        v-for="s in page.entities"-->
-    <!--        :key="s._links.self.href"-->
-    <!--        :song="s"-->
-    <!--        @onDelete="load(page.number)"-->
-    <!--    />-->
+    <!--        <song-->
+    <!--            v-for="s in page.entities"-->
+    <!--            :key="s._links.self.href"-->
+    <!--            :song="s"-->
+    <!--            @onDelete="load(page.number)"-->
+    <!--        />-->
   </div>
 </template>
 
@@ -50,7 +46,7 @@ import Page from '@/models/Page'
 import PageNav from '@/components/PageNav'
 import Song from '@/components/Song'
 import SongEntity from '@/models/Song'
-import {loadPage} from '@/services/rest'
+import {deletEntry, loadPage} from '@/services/rest'
 
 export default {
   name: 'SongView',
@@ -63,11 +59,12 @@ export default {
     return {
       page: new Page(),
       selected: [],
-      songs: {
+      entities: {
         mdCount: null,
         mdPage: null,
         mdData: []
       },
+      rowsPerPage: 3,
     }
   },
 
@@ -76,10 +73,10 @@ export default {
   },
 
   methods: {
-    load(pageNum = 0, pageSize) {
-      loadPage(SongEntity, pageNum, {pageSize})
-          .then(page => {
-            this.page = page
+    load(pageNum = 0) {
+      loadPage(SongEntity, pageNum, {size: 5})
+          .then(entities => {
+            this.page = entities
           })
     },
     onSelect(items) {
@@ -93,6 +90,9 @@ export default {
       }
 
       return `${count} user${plural} selected`
+    },
+    del() {
+      deletEntry(this.selected).then(() => this.load(this.page.number))
     }
   }
 }
