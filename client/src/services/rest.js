@@ -26,24 +26,40 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
         })
 }
 
-export function deletEntry(item) {
-    console.log(item)
-    if (Array.isArray(item)) {
+export function deletEntry(entry) {
+    if (Array.isArray(entry)) {
         return axios
             .delete(
-                `${item.pop()._links.self.href}`,
+                `${entry.pop()._links.self.href}`,
                 {}
             )
             .then(() => {
-                if (item.length >= 1) {
-                    return deletEntry(item)
+                if (entry.length >= 1) {
+                    return deletEntry(entry)
                 }
             })
     } else {
         return axios
             .delete(
-                `${item.pop()._links.self.href}`,
+                entry._links.self.href,
                 {}
-            )
+            ).catch(response => {
+                console.error('rest.delete() error', response)
+            })
     }
+}
+
+export function editEntry(entry, data) {
+    return axios
+        .patch(
+            entry._links.self.href,
+            data,
+            {}
+        )
+        .then(() => {
+
+        })
+        .catch(response => {
+            console.error('rest.patch() error', response)
+        })
 }

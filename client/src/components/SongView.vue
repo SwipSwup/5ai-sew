@@ -1,7 +1,7 @@
 <template>
   <div>
     <div>
-      <page-nav :page="page" @navigated="load"/>
+      <page-nav class="nav" :page="page" @navigated="load"/>
     </div>
     <md-table v-model="page.entities" md-card @md-selected="onSelect">
 
@@ -19,11 +19,12 @@
       </md-table-toolbar>
       <md-table-row slot="md-table-row" slot-scope="{ item }"
                     md-selectable="multiple">
-        <md-table-cell md-label="Title" md-sort-by="name">{{ item.title }}</md-table-cell>
-        <md-table-cell md-label="Artist" md-sort-by="email">{{ item.artist }}</md-table-cell>
-        <md-table-cell md-label="Genre" md-sort-by="gender">{{ item.genre }}</md-table-cell>
+        <md-table-cell md-label="Title" md-sort-by="title">{{ item.title }}</md-table-cell>
+        <md-table-cell md-label="Artist" md-sort-by="artist">{{ item.artist }}</md-table-cell>
+        <md-table-cell md-label="Genre" md-sort-by="genre">{{ item.genre.toString() }}</md-table-cell>
         <md-table-cell md-label="">
-          <router-link to="/editSong">
+<!--          <router-link :to="{ name: 'editSong', params: {  title: item.title, artist: item.artist, genre: item.genre }}">-->
+          <router-link :to="{ name: 'editSong', params: {  song: item }}">
             <md-button class="md-icon-button" @click="">
               <md-icon>edit</md-icon>
             </md-button>
@@ -99,5 +100,7 @@ export default {
 </script>
 
 <style scoped>
-
+.nav {
+  margin-bottom: 15px;
+}
 </style>
