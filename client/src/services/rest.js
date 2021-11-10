@@ -13,7 +13,6 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
         .then(response => {
             const page = new Page(Entity, response)
             if (page.entities.length || (pageNum === 0)) {
-                console.log('rest.load() OK', page)
                 return page
             } else {
                 return loadPage(Entity, pageNum - 1, params)
@@ -24,22 +23,22 @@ export function loadPage(Entity, pageNum = 0, params = {}) {
         })
 }
 
-export function deletEntry(entry) {
-    if (Array.isArray(entry)) {
+export function deletEntry(Entity) {
+    if (Array.isArray(Entity)) {
         return axios
             .delete(
-                `${entry.pop()._links.self.href}`,
+                `${Entity.pop()._links.self.href}`,
                 {}
             )
             .then(() => {
-                if (entry.length >= 1) {
-                    return deletEntry(entry)
+                if (Entity.length >= 1) {
+                    return deletEntry(Entity)
                 }
             })
     } else {
         return axios
             .delete(
-                entry._links.self.href,
+                Entity._links.self.href,
                 {}
             ).catch(response => {
                 console.error('rest.delete() error', response)
@@ -47,10 +46,22 @@ export function deletEntry(entry) {
     }
 }
 
-export function editEntry(entry, data) {
+export function editEntry(Entity, data) {
     return axios
         .patch(
-            entry._links.self.href,
+            Entity._links.self.href,
+            data,
+            {}
+        )
+        .catch(response => {
+            console.error('rest.patch() error', response)
+        })
+}
+
+export function addEntry(Entity, data) {
+    return axios
+        .post(
+            `${API_BASE}/${Entity.path}`,
             data,
             {}
         )

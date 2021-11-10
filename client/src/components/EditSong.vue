@@ -24,9 +24,9 @@
               </md-field>
             </div>
 
-            <!-- TODO implement -->
             <div class="md-layout-item md-small-size-100">
-              <md-chips class="md-primary" v-model="song.genre" md-placeholder="Add genre..." md-check-duplicated>
+              <md-chips class="md-primary" v-model="song.genre"
+                        md-placeholder="Add genre..." md-check-duplicated>
                 <label>Genre</label>
               </md-chips>
             </div>
@@ -52,13 +52,14 @@ import {
   required,
   minLength,
 } from 'vuelidate/lib/validators'
-import {editEntry} from "@/services/rest";
+import {addEntry, editEntry} from "@/services/rest";
+import SongEntity from "@/models/Song";
 
 export default {
   name: 'EditSong',
   mixins: [validationMixin],
   data: () => ({
-    song: null,
+    song: SongEntity,
     songSaved: false,
     sending: false,
     lastUser: null
@@ -74,8 +75,8 @@ export default {
       }
     }
   },
-  created() {
-    this.song = this.$route.params.song
+  mounted() {
+    this.song = this.$route.params.song === undefined ? new SongEntity() : this.$route.params.song;
   },
   methods: {
     getValidationClass(fieldName) {
@@ -88,20 +89,28 @@ export default {
       }
     },
     clearForm() {
+      this.songSaved = true
+      this.sending = false
       this.$v.$reset()
     },
     saveSong() {
       this.sending = true
 
-      editEntry(this.song, {
+      const data = {
         title: this.song.title,
         artist: this.song.artist,
         genre: this.song.genre.join('|')
-      }).then(() => {
-        this.songSaved = true
-        this.sending = false
-        this.clearForm()
-      })
+      }
+
+      if (this.$route.params.song === undefined) {
+        addEntry(SongEntity, data).then(() => {
+          this.clearForm()
+        })
+      } else {
+        editEntry(this.song, data).then(() => {
+          this.clearForm()
+        })
+      }
     },
     validateUser() {
       this.$v.$touch()
