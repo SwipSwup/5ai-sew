@@ -41,7 +41,7 @@
         </md-card-actions>
       </md-card>
 
-      <md-snackbar :md-active.sync="songSaved">The song has been updated</md-snackbar>
+      <md-snackbar :md-active.sync="songSaved">{{ info }}</md-snackbar>
     </form>
   </div>
 </template>
@@ -62,7 +62,8 @@ export default {
     song: SongEntity,
     songSaved: false,
     sending: false,
-    lastUser: null
+    lastUser: null,
+    info: null
   }),
   validations: {
     song: {
@@ -103,11 +104,23 @@ export default {
       }
 
       if (this.$route.params.song === undefined) {
-        addEntry(SongEntity, data).then(() => {
+        addEntry(SongEntity, data).then(response => {
+          if(!response) {
+            this.info = "There was an error";
+          } else {
+            this.info = "The song has been added";
+          }
+        }).finally(() => {
           this.clearForm()
         })
       } else {
-        editEntry(this.song, data).then(() => {
+        editEntry(this.song, data).then(response => {
+          if(!response) {
+            this.info = "There was an error";
+          } else {
+            this.info = "The song has been updated";
+          }
+        }).finally(() => {
           this.clearForm()
         })
       }
