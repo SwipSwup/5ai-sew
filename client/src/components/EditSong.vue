@@ -37,7 +37,7 @@
         <md-progress-bar md-mode="indeterminate" v-if="sending"/>
 
         <md-card-actions>
-          <md-button class="md-primary" :disabled="sending" @click="validateUser">Save</md-button>
+          <md-button class="md-primary" :disabled="sending" @click="validateSong">Save</md-button>
         </md-card-actions>
       </md-card>
 
@@ -101,31 +101,45 @@ export default {
         title: this.song.title,
         artist: this.song.artist,
         genre: this.song.genre.join('|')
-      }
+      };
 
-      if (this.$route.params.song === undefined) {
-        addEntry(SongEntity, data).then(response => {
-          if(!response) {
-            this.info = "There was an error";
-          } else {
-            this.info = "The song has been added";
-          }
-        }).finally(() => {
-          this.clearForm()
-        })
-      } else {
-        editEntry(this.song, data).then(response => {
-          if(!response) {
-            this.info = "There was an error";
-          } else {
-            this.info = "The song has been updated";
-          }
-        }).finally(() => {
-          this.clearForm()
-        })
-      }
+      (this.$route.params.song === undefined ? addEntry(SongEntity, data) : editEntry(this.song, data))
+          .then(status => {
+            if(status === 200) {
+              this.info = "The song has been added";
+              this.$router.back();
+            } else {
+              this.info = `There was an Error. Errorcode ${ status }`;
+            }
+          }).finally(() => {
+            this.clearForm()
+          })
+      //
+      // if (this.$route.params.song === undefined) {
+      //   addEntry(SongEntity, data).then(response => {
+      //     if(!response) {
+      //       this.info = "There was an error";
+      //     } else {
+      //       this.$router.back();
+      //       this.info = "The song has been added";
+      //     }
+      //   }).finally(() => {
+      //     this.clearForm()
+      //   })
+      // } else {
+      //   editEntry(this.song, data).then(response => {
+      //     if(!response) {
+      //       this.info = "There was an error";
+      //     } else {
+      //       this.$router.back();
+      //       this.info = "The song has been updated";
+      //     }
+      //   }).finally(() => {
+      //     this.clearForm()
+      //   })
+      // }
     },
-    validateUser() {
+    validateSong() {
       this.$v.$touch()
 
       if (!this.$v.$invalid)

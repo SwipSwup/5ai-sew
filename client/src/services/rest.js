@@ -54,11 +54,13 @@ export function editEntry(Entity, data) {
         .patch(
             Entity._links.self.href,
             data,
-            {}
+            {
+                headers: { 'If-Match': Entity.etag }
+            }
         )
         .catch(response => {
-            console.error('rest.patch() error', response)
-            return false;
+            //console.error('rest.patch() error', response))
+            return response.response.status;
         })
 }
 
