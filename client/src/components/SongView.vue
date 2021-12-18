@@ -12,7 +12,7 @@
         <div class="md-toolbar-section-start">{{ getAlternateLabel(count) }}</div>
 
         <div class="md-toolbar-section-end">
-          <md-button class="md-icon-button">
+          <md-button class="md-icon-button" @click="del">
             <md-icon>delete</md-icon>
           </md-button>
         </div>
@@ -33,7 +33,7 @@ import Page from '@/models/Page'
 import PageNav from '@/components/PageNav'
 import Song from '@/components/Song'
 import SongEntity from '@/models/Song'
-import {loadPage} from '@/services/rest'
+import {deleteSong, loadPage} from '@/services/rest'
 
 export default {
   name: 'SongView',
@@ -77,7 +77,12 @@ export default {
 
       return `${count} user${plural} selected`
     },
-
+    del() {
+      deleteSong(this.selected[0])
+          .then(() => {
+                this.load(0, 100)
+          });
+    }
   }
 }
 </script>
