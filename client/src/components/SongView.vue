@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div>
+      <page-nav :page="page" @navigated="load"/>
+    </div>
     <md-table v-model="page.entities" md-card @md-selected="onSelect">
       <md-table-toolbar>
         <h1 class="md-title">Songs</h1>
@@ -21,27 +24,7 @@
         <md-table-cell md-label="Artist" md-sort-by="email">{{ item.artist }}</md-table-cell>
         <md-table-cell md-label="Genre" md-sort-by="gender">{{ item.genre }}</md-table-cell>
       </md-table-row>
-      <md-table-pagination
-          :md-page-size="rowsPerPage"
-          :md-page-options="[3, 5, 10, 15]"
-          :md-update="updatePagination"
-          :md-data.sync="users" />
     </md-table>
-
-    <p>Selected:</p>
-    {{ selected }}
-
-
-    <!--    <div>-->
-    <!--        <page-nav :page="page" @navigated="load"/>-->
-    <!--    </div>-->
-
-    <!--    <song-->
-    <!--        v-for="s in page.entities"-->
-    <!--        :key="s._links.self.href"-->
-    <!--        :song="s"-->
-    <!--        @onDelete="load(page.number)"-->
-    <!--    />-->
   </div>
 </template>
 
@@ -93,7 +76,8 @@ export default {
       }
 
       return `${count} user${plural} selected`
-    }
+    },
+
   }
 }
 </script>

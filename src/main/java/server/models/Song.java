@@ -22,5 +22,4 @@ public class Song {
     private String artist;
 
     private String genre;
-
 }
