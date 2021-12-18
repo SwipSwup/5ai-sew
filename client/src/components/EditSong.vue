@@ -7,13 +7,14 @@
         </md-card-header>
 
         <md-card-content>
-          <md-field :class="getValidationClass('title')">
-            <label for="title">Title</label>
-            <md-input name="title" id="title" autocomplete="song-title" v-model="song.title" :disabled="sending"/>
-            <span class="md-error" v-if="!$v.song.title.required">The title is required</span>
-          </md-field>
-
           <div class="md-layout md-gutter">
+            <div class="md-layout-item md-small-size-100">
+              <md-field :class="getValidationClass('title')">
+                <label for="title">Title</label>
+                <md-input name="title" id="title" autocomplete="song-title" v-model="song.title" :disabled="sending"/>
+                <span class="md-error" v-if="!$v.song.title.required">The title is required</span>
+              </md-field>
+            </div>
             <div class="md-layout-item md-small-size-100">
               <md-field :class="getValidationClass('artist')">
                 <label for="artist">Artist</label>
@@ -23,13 +24,25 @@
                 <span class="md-error" v-else-if="!$v.song.artist.minlength">Invalid first artist name</span>
               </md-field>
             </div>
+          </div>
 
+          <div class="md-layout md-gutter">
             <div class="md-layout-item md-small-size-100">
               <md-chips class="md-primary" v-model="song.genre"
                         md-placeholder="Add genre..." md-check-duplicated>
                 <label>Genre</label>
               </md-chips>
             </div>
+
+            <div class="md-layout-item">
+              <md-field>
+                <label>Audio datei</label>
+                <md-file @md-change="readAudioFile" accept="audio/*"/>
+              </md-field>
+            </div>
+          </div>
+          <div class="md-layout-item">
+            <audio :src="song.audio" class="audio" type="audio/mp3" controls/>
           </div>
 
         </md-card-content>
@@ -78,6 +91,7 @@ export default {
   },
   mounted() {
     this.song = this.$route.params.song === undefined ? new SongEntity() : this.$route.params.song;
+    //this.$refs.fileInput.vaildity = true
   },
   methods: {
     getValidationClass(fieldName) {
@@ -100,51 +114,38 @@ export default {
       const data = {
         title: this.song.title,
         artist: this.song.artist,
-        genre: this.song.genre.join('|')
+        genre: this.song.genre.join('|'),
+        audio: this.song.audio
       };
 
       (this.$route.params.song === undefined ? addEntry(SongEntity, data) : editEntry(this.song, data))
           .then(status => {
-            if(status === 200) {
+            if (status === 200) {
               this.info = "The song has been added";
               this.$router.back();
             } else {
-              this.info = `There was an Error. Errorcode ${ status }`;
+              this.info = `There was an Error. Errorcode ${status}`;
             }
           }).finally(() => {
-            this.clearForm()
-          })
-      //
-      // if (this.$route.params.song === undefined) {
-      //   addEntry(SongEntity, data).then(response => {
-      //     if(!response) {
-      //       this.info = "There was an error";
-      //     } else {
-      //       this.$router.back();
-      //       this.info = "The song has been added";
-      //     }
-      //   }).finally(() => {
-      //     this.clearForm()
-      //   })
-      // } else {
-      //   editEntry(this.song, data).then(response => {
-      //     if(!response) {
-      //       this.info = "There was an error";
-      //     } else {
-      //       this.$router.back();
-      //       this.info = "The song has been updated";
-      //     }
-      //   }).finally(() => {
-      //     this.clearForm()
-      //   })
-      // }
+        this.clearForm()
+      })
+
     },
     validateSong() {
       this.$v.$touch()
 
       if (!this.$v.$invalid)
         this.saveSong()
+    },
+    readAudioFile(file) {
+      const reader = new FileReader()
+      reader.onload = event => {
+        this.song.audio = event.target.result
+      }
+
+      reader.readAsDataURL(file[0])
     }
+
   }
 }
 </script>
@@ -155,5 +156,10 @@ export default {
   top: 0;
   right: 0;
   left: 0;
+}
+
+.audio {
+  height: 50px;
+  /*width: 100px;*/
 }
 </style>

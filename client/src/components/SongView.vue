@@ -28,6 +28,9 @@
             <md-icon>edit</md-icon>
           </md-button>
         </md-table-cell>
+        <md-table-cell md-label="">
+          <audio :src="item.audio" class="audio" type="audio/mp3" controls />
+        </md-table-cell>
       </md-table-row>
     </md-table>
 
@@ -99,5 +102,9 @@ export default {
 <style scoped>
 .nav {
   margin-bottom: 15px;
+}
+.audio {
+  height: 50px;
+  /*width: 100px;*/
 }
 </style>

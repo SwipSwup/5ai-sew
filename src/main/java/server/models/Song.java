@@ -27,6 +27,9 @@ public class Song {
     @Size(min = 3)
     private String artist;
 
+    @Lob
+    private String audio;
+
     private String genre;
 
     public Long getETag() {
