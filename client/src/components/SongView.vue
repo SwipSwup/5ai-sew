@@ -23,6 +23,13 @@
         <md-table-cell md-label="Title" md-sort-by="name">{{ item.title }}</md-table-cell>
         <md-table-cell md-label="Artist" md-sort-by="email">{{ item.artist }}</md-table-cell>
         <md-table-cell md-label="Genre" md-sort-by="gender">{{ item.genre }}</md-table-cell>
+        <md-table-cell md-label="" md-sort-by="">
+          <router-link :to="{ name: 'SongEditor', data: item }">
+            <md-button>
+              <md-icon>edit</md-icon>
+            </md-button>
+          </router-link>
+        </md-table-cell>
       </md-table-row>
     </md-table>
   </div>
@@ -80,7 +87,7 @@ export default {
     del() {
       deleteSong(this.selected[0])
           .then(() => {
-                this.load(0, 100)
+            this.load(0, 100)
           });
     }
   }

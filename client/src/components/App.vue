@@ -6,7 +6,7 @@
   >
     <md-app-toolbar class="md-primary md-dense">
       <div class="md-toolbar-section-start">
-        <router-link :to="{name: 'default'}" class="md-title">YouSong</router-link>
+        <router-link to="/" class="md-title">YouSong</router-link>
       </div>
 
       <div class="md-subheading md-toolbar-section-end">
