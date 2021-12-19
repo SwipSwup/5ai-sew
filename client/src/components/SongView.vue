@@ -24,7 +24,7 @@
         <md-table-cell md-label="Artist" md-sort-by="email">{{ item.artist }}</md-table-cell>
         <md-table-cell md-label="Genre" md-sort-by="gender">{{ item.genre }}</md-table-cell>
         <md-table-cell md-label="" md-sort-by="">
-          <router-link :to="{ name: 'SongEditor', data: item }">
+          <router-link :to="{ name: 'SongEditor', params: { data: item }}">
             <md-button>
               <md-icon>edit</md-icon>
             </md-button>

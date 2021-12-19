@@ -1,10 +1,19 @@
 <template>
-  <div>Editor</div>
+  <div>{{ this.name }}</div>
 </template>
 
 <script>
 export default {
-  name: "SongEditor"
+  name: "SongEditor",
+  data() {
+    return {
+      name: String
+    }
+  },
+  mounted() {
+    console.log(this.$route.params);
+    this.name = this.$route.params.data.title;
+  }
 }
 </script>
 
